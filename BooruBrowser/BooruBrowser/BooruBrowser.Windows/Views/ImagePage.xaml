@@ -1,0 +1,77 @@
+﻿<mvvm:PageBase
+    x:Class="BooruBrowser.Views.ImagePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BooruBrowser.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mvvm="using:BooruBrowser.MVVM"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:dt="using:BooruBrowser.DesignTime"
+    d:DataContext="{Binding Source={d:DesignInstance IsDesignTimeCreatable=True, Type=dt:ImagePageViewModelDT}}"
+    mc:Ignorable="d">
+
+    <Hub Padding="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+         d:DataContext="{Binding Source={d:DesignInstance IsDesignTimeCreatable=True, Type=dt:ImagePageViewModelDT}}">
+        <Hub.Header>
+            <Grid>
+                <AppBarButton Icon="Back" Command="{Binding BackCommand}" Margin="0,52,0,0" />
+                <TextBlock Text="{Binding CurrentSiteDescriptor.Name}" Style="{StaticResource PageHeaderTextBlockStyle}" />
+            </Grid>
+        </Hub.Header>
+        
+        <HubSection x:Uid="ImagePageImage" Header="Image" Padding="116,0,80,40">
+            <DataTemplate>
+                <Image Source="{Binding CurrentImageData.MediumURL}" Stretch="Uniform" MaxWidth="720" Height="540" />
+            </DataTemplate>
+        </HubSection>
+
+        <HubSection x:Uid="ImagePageTags" Header="Tags" Padding="0,0,80,40">
+            <DataTemplate>
+                <ListView ItemsSource="{Binding CurrentImageData.TagList}" IsItemClickEnabled="True"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ScrollViewer.HorizontalScrollMode="Disabled">
+                    <interactivity:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="ItemClick">
+                            <core:InvokeCommandAction Command="{Binding TagClickedCommand}" />
+                        </core:EventTriggerBehavior>
+                    </interactivity:Interaction.Behaviors>
+                    
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="Control">
+                            <Setter Property="Height" Value="30" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </DataTemplate>
+        </HubSection>
+
+        <HubSection x:Uid="ImagePageData" Header="Data" Padding="0,0,80,40">
+            <DataTemplate>
+                <TextBlock FontSize="16">
+                    <Run x:Uid="ImagePageUploadedBy" Text="Uploaded by:" FontWeight="Bold" />
+                    <Run Text="{Binding CurrentImageData.Uploader}" />
+                    <LineBreak />
+                    
+                    <Hyperlink  NavigateUri="{Binding CurrentImageData.Source}">Link</Hyperlink>
+                    <LineBreak />
+                    
+                    <Run x:Uid="ImagePageFileSize" Text="File size:" FontWeight="Bold" />
+                    <Run Text="{Binding CurrentImageData.FileSize}" />
+                    <Run Text="bytes" />
+                    <LineBreak />
+                    
+                    <Run x:Uid="ImagePageScore" Text="Score:" FontWeight="Bold" />
+                    <Run Text="{Binding CurrentImageData.Score}" />
+                </TextBlock>
+            </DataTemplate>
+        </HubSection>
+    </Hub>
+</mvvm:PageBase>

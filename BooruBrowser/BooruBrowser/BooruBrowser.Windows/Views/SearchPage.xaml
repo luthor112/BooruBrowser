@@ -1,0 +1,56 @@
+﻿<mvvm:PageBase
+    x:Class="BooruBrowser.Views.SearchPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BooruBrowser.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mvvm="using:BooruBrowser.MVVM"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:dt="using:BooruBrowser.DesignTime"
+    d:DataContext="{Binding Source={d:DesignInstance IsDesignTimeCreatable=True, Type=dt:SearchPageViewModelDT}}"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          d:DataContext="{Binding Source={d:DesignInstance IsDesignTimeCreatable=True, Type=dt:SearchPageViewModelDT}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <AppBarButton Icon="Back" Command="{Binding BackCommand}" Margin="0,52,0,0" />
+            <TextBlock Text="{Binding CurrentDescriptor.Name}" Style="{StaticResource PageHeaderTextBlockStyle}" />
+        </Grid>
+
+        <SearchBox Grid.Row="0" PlaceholderText="Search" Height="35" Width="400" HorizontalAlignment="Right"
+                   VerticalAlignment="Top" Margin="0,70,80,0" SearchHistoryEnabled="False"
+                   QueryText="{Binding DefaultSearchString}" x:Uid="SearchPageSearchBox">
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="SuggestionsRequested">
+                    <core:InvokeCommandAction Command="{Binding SuggestionsRequestedCommand}" />
+                </core:EventTriggerBehavior>
+                <core:EventTriggerBehavior EventName="ResultSuggestionChosen">
+                    <core:InvokeCommandAction Command="{Binding ResultSuggestionChosenCommand}" />
+                </core:EventTriggerBehavior>
+                <core:EventTriggerBehavior EventName="QuerySubmitted">
+                    <core:InvokeCommandAction Command="{Binding QuerySubmittedCommand}" />
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+        </SearchBox>
+
+        <GridView ItemsSource="{Binding CurrentItemCollection}" IsItemClickEnabled="True" Margin="30,0,30,0" Grid.Row="1">
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="ItemClick">
+                    <core:InvokeCommandAction Command="{Binding GalleryItemClickedCommand}" />
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Image Source="{Binding SmallURL}" Stretch="Uniform" Width="280" Height="280" />
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+    </Grid>
+</mvvm:PageBase>
