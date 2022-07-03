@@ -13,7 +13,7 @@ namespace BooruBrowser.MVVM
     {
         protected ViewModelBase ViewModel
         {
-            get { return DataContext as ViewModelBase; }    // Cast, hiba eseten null-al ter vissza
+            get { return DataContext as ViewModelBase; }    // Returns null if casting fails
         }
 
         private String _pageKey;
